@@ -138,7 +138,20 @@ public static function start($type=null) {
 	$type = self::check_type($type);
 	
 	$cookie = self::get_cookie_settings($type);
-	session_set_cookie_params($cookie['duration'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['http_only']);
+	
+	if (PHP_VERSION_ID < 70300) {
+		session_set_cookie_params($cookie['duration'], $cookie['path'] . '; samesite=' . $cookie['samesite'], $cookie['domain'], $cookie['secure'], $cookie['http_only']);
+	} else {
+		session_set_cookie_params([
+			'lifetime' => $cookie['duration'],
+			'path'     => $cookie['path'],
+			'domain'   => $cookie['domain'],
+			'secure'   => $cookie['secure'],
+			'httponly' => $cookie['http_only'],
+			'samesite' => $cookie['samesite'],
+		]);
+	}
+	
 	session_name($cookie['name']);
 
 	// prevent garbage collection before the session expires
@@ -466,6 +479,7 @@ private static function get_cookie_settings($type) {
 	$path      = '/';
 	$secure    = !empty($_SERVER['HTTPS']) ? true : false;
 	$http_only = true;
+	$samesite  = 'None';
 	
 	return [
 		'name'      => $name,
@@ -474,6 +488,7 @@ private static function get_cookie_settings($type) {
 		'path'      => $path,
 		'secure'    => $secure,
 		'http_only' => $http_only,
+		'samesite'  => 'None',
 	];
 }
 
@@ -534,7 +549,19 @@ private static function update_cookie_expiration($type, $expire_now=false) {
 		$expire = (time() - 604800); // one week ago
 	}
 	
-	setcookie($params['name'], $value, $expire, $params['path'], $params['domain'], $params['secure'], $params['http_only']);
+	if (PHP_VERSION_ID < 70300) {
+		setcookie($params['name'], $value, $expire, $params['path'] . '; samesite=' . $params['samesite'], $params['domain'], $params['secure'], $params['http_only']);
+		return;
+	}
+	
+	setcookie($params['name'], $value, [
+		'expires'  => $expire,
+		'path'     => $params['path'],
+		'domain'   => $params['domain'],
+		'samesite' => $params['samesite'],
+		'secure'   => $params['secure'],
+		'httponly' => $params['http_only'],
+	]);
 }
 
 }
