@@ -103,7 +103,7 @@ private static function uncertain() {
 		error_reporting(-1);
 	}
 	
-	$error_handler = function($level, $message, $file, $line, $context) {
+	$error_handler = function(int $level, string $message, ?string $file=null, ?int $line=null, ?array $context=null) {
 		throw new \ErrorException($message, $code=0, $level, $file, $line);
 	};
 	set_error_handler($error_handler);
