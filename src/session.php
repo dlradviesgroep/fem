@@ -479,7 +479,7 @@ private static function get_cookie_settings($type) {
 	$path      = '/';
 	$secure    = !empty($_SERVER['HTTPS']) ? true : false;
 	$http_only = true;
-	$samesite  = 'None';
+	$samesite  = $secure ? 'None' : '';
 	
 	return [
 		'name'      => $name,
@@ -488,7 +488,7 @@ private static function get_cookie_settings($type) {
 		'path'      => $path,
 		'secure'    => $secure,
 		'http_only' => $http_only,
-		'samesite'  => 'None',
+		'samesite'  => $samesite,
 	];
 }
 
