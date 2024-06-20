@@ -21,8 +21,7 @@
 		"php": "8.3",
 		"ircmaxell/password-compat": "~1",
 		"guzzlehttp/guzzle": "~7",
-		"mustache/mustache": "~2",
-		"swiftmailer/swiftmailer": "^5.4"
+		"mustache/mustache": "~2"
 	},
 	"autoload": {
 		"psr-4": {
