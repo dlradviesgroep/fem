@@ -18,7 +18,7 @@
 		"source": "https://github.com/lode/fem/tree/master/src"
 	},
 	"require": {
-		"php": "8.3",
+		"php": "8.4",
 		"ircmaxell/password-compat": "~1",
 		"guzzlehttp/guzzle": "~7",
 		"mustache/mustache": "~2"
